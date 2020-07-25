@@ -1,0 +1,22 @@
+name: our_lists
+description: The new Flutter application.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  provider: 4.3.1
+  uuid: 2.2.0
+  cloud_firestore: 0.13.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
