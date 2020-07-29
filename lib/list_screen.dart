@@ -16,20 +16,20 @@ class ItemsListScreen extends StatelessWidget {
       appBar: AppBar(
         title: StreamBuilder<DocumentSnapshot>(
           stream:
-              Firestore.instance.document("$LISTS_PATH/$listId").snapshots(),
+              FirebaseFirestore.instance.doc("$LISTS_PATH/$listId").snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) return Text('Error: ${snapshot.error}');
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return Text('Loading...');
               default:
-                return Text(snapshot.data.data['name']);
+                return Text(snapshot.data.data()['name']);
             }
           },
         ),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection(itemsPath).snapshots(),
+        stream: FirebaseFirestore.instance.collection(itemsPath).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
@@ -38,25 +38,23 @@ class ItemsListScreen extends StatelessWidget {
             default:
               return ListView(
                 children:
-                    snapshot.data.documents.map((DocumentSnapshot document) {
+                snapshot.data.docs.map((DocumentSnapshot document) {
                   return GestureDetector(
                     child: CheckboxListTile(
-                      title: Text(document['name']),
-                      value: document['is_checked'],
+                      title: Text(document.get('name')),
+                      value: document.get('is_checked'),
                       onChanged: (ch) {
-                        Firestore.instance.runTransaction((transaction) async {
-                          await transaction.update(
-                            document.reference,
-                            {"is_checked": ch},
-                          );
-                        });
+                        document.reference.set(
+                          {"is_checked": ch},
+                          SetOptions(merge: true),
+                        );
                       },
                     ),
                     onLongPress: () async {
                       final delete = await showDialog(
                         context: context,
                         child: DeleteItemDialog(
-                          itemName: document["name"],
+                          itemName: document.get("name"),
                         ),
                       );
                       if (delete == true) {
@@ -76,7 +74,7 @@ class ItemsListScreen extends StatelessWidget {
             child: NewItemDialog(),
           );
           if (name != null) {
-            Firestore.instance.collection(itemsPath).document().setData(
+            FirebaseFirestore.instance.collection(itemsPath).doc().set(
               {
                 "name": name,
                 "is_checked": false,

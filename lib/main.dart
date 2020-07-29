@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:our_lists/dialogs.dart';
 import 'package:our_lists/list_screen.dart';
@@ -9,7 +10,9 @@ class RouteNames {
   static const itemsList = "itemsList";
 }
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -26,8 +29,9 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (routeSettings) {
         if (routeSettings.name == RouteNames.itemsList) {
           return MaterialPageRoute(
-            builder: (context) =>
-                ItemsListScreen(listId: routeSettings.arguments as String),
+            builder: (context) => ItemsListScreen(
+              listId: routeSettings.arguments as String,
+            ),
             settings: routeSettings,
           );
         }
@@ -45,7 +49,7 @@ class MainScreen extends StatelessWidget {
         title: Text("Our Lists"),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection(LISTS_PATH).snapshots(),
+        stream: FirebaseFirestore.instance.collection(LISTS_PATH).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
@@ -53,19 +57,19 @@ class MainScreen extends StatelessWidget {
               return Text('Loading...');
             default:
               return ListView(
-                  children: snapshot.data.documents.map((document) {
+                  children: snapshot.data.docs.map((document) {
                 return ListTile(
-                  title: Text(document['name']),
+                  title: Text(document.get('name')),
                   onTap: () => Navigator.pushNamed(
                     context,
                     RouteNames.itemsList,
-                    arguments: document.documentID,
+                    arguments: document.id,
                   ),
                   onLongPress: () async {
                     final delete = await showDialog(
                       context: context,
                       child: DeleteItemDialog(
-                        itemName: document["name"],
+                        itemName: document.get("name"),
                       ),
                     );
                     if (delete == true) {
@@ -84,7 +88,7 @@ class MainScreen extends StatelessWidget {
             child: NewListDialog(),
           );
           if (name != null) {
-            Firestore.instance.collection(LISTS_PATH).document().setData(
+            FirebaseFirestore.instance.collection(LISTS_PATH).doc().set(
               {"name": name},
             );
           }
