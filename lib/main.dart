@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Our Lists',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepOrange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MainScreen(),
@@ -56,28 +56,32 @@ class MainScreen extends StatelessWidget {
             case ConnectionState.waiting:
               return Text('Loading...');
             default:
-              return ListView(
-                  children: snapshot.data.docs.map((document) {
-                return ListTile(
-                  title: Text(document.get('name')),
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    RouteNames.itemsList,
-                    arguments: document.id,
-                  ),
-                  onLongPress: () async {
-                    final delete = await showDialog(
-                      context: context,
-                      child: DeleteItemDialog(
-                        itemName: document.get("name"),
-                      ),
-                    );
-                    if (delete == true) {
-                      document.reference.delete();
-                    }
-                  },
-                );
-              }).toList());
+              return Scrollbar(
+                child: ListView(
+                  children: snapshot.data.docs.map<Widget>((document) {
+                        return ListTile(
+                          title: Text(document.get('name')),
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            RouteNames.itemsList,
+                            arguments: document.id,
+                          ),
+                          onLongPress: () async {
+                            final delete = await showDialog(
+                              context: context,
+                              child: DeleteItemDialog(
+                                itemName: document.get("name"),
+                              ),
+                            );
+                            if (delete == true) {
+                              document.reference.delete();
+                            }
+                          },
+                        );
+                      }).toList() +
+                      [SizedBox(height: 96)],
+                ),
+              );
           }
         },
       ),

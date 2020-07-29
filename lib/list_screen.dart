@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:our_lists/dialogs.dart';
+import 'package:our_lists/item_widget.dart';
 import 'package:our_lists/main.dart';
+import 'package:our_lists/util/utils.dart';
 
 class ItemsListScreen extends StatelessWidget {
   final String listId;
@@ -36,33 +38,17 @@ class ItemsListScreen extends StatelessWidget {
             case ConnectionState.waiting:
               return Text('Loading...');
             default:
-              return ListView(
-                children:
-                snapshot.data.docs.map((DocumentSnapshot document) {
-                  return GestureDetector(
-                    child: CheckboxListTile(
-                      title: Text(document.get('name')),
-                      value: document.get('is_checked'),
-                      onChanged: (ch) {
-                        document.reference.set(
-                          {"is_checked": ch},
-                          SetOptions(merge: true),
-                        );
-                      },
-                    ),
-                    onLongPress: () async {
-                      final delete = await showDialog(
-                        context: context,
-                        child: DeleteItemDialog(
-                          itemName: document.get("name"),
-                        ),
-                      );
-                      if (delete == true) {
-                        document.reference.delete();
-                      }
-                    },
-                  );
-                }).toList(),
+              return Scrollbar(
+                child: ListView(
+                  children: [
+                    ...snapshot.data.docs.sortedByQ([
+                      (d) => -1 * ((d.data()["is_favourite"] ?? false) ? 1 : 0),
+                      (d) => -1 * ((d.data()["is_checked"] ?? false) ? 1 : 0),
+                      (d) => d.data()["name"] ?? "",
+                    ]).map<Widget>((document) => ItemWidget(document)),
+                    SizedBox(height: 96),
+                  ],
+                ),
               );
           }
         },
