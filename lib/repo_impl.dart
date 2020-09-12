@@ -37,8 +37,8 @@ class RepoImpl implements Repo {
               .toList()
               .sortedByQ(
             [
+              (d) => d.isChecked ? 1 : 0,
               (d) => -1 * (d.isFavourite ? 1 : 0),
-              (d) => -1 * (d.isChecked ? 1 : 0),
               (d) => d.name,
             ],
           ).toUnmodifiable());
