@@ -10,6 +10,8 @@ class ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //todo: ripple on touch
+    //todo: don't consume long press on checkBox and fav-icon
     return Padding(
       padding: EdgeInsets.all(2),
       child: GestureDetector(
