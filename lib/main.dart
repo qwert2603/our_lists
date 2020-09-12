@@ -8,7 +8,7 @@ import 'package:our_lists/repo_impl.dart';
 import 'package:our_lists/utils.dart';
 import 'package:provider/provider.dart';
 
-const LISTS_PATH = "/apps/our_lists.debug/lists";
+const LISTS_PATH = "/apps/our_lists/lists";
 
 class RouteNames {
   static const itemsList = "itemsList";
