@@ -1,14 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:our_lists/dialogs.dart';
 import 'package:our_lists/item_widget.dart';
-import 'package:our_lists/main.dart';
-import 'package:our_lists/util/utils.dart';
+import 'package:our_lists/model.dart';
+import 'package:our_lists/utils.dart';
 
 class ItemsListScreen extends StatelessWidget {
   final String listId;
-
-  String get itemsPath => "$LISTS_PATH/$listId/items";
 
   ItemsListScreen({this.listId});
 
@@ -16,22 +13,21 @@ class ItemsListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: StreamBuilder<DocumentSnapshot>(
-          stream:
-              FirebaseFirestore.instance.doc("$LISTS_PATH/$listId").snapshots(),
+        title: StreamBuilder<ItemsList>(
+          stream: context.repo.observeList(listId),
           builder: (context, snapshot) {
             if (snapshot.hasError) return Text('Error: ${snapshot.error}');
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return Text('Loading...');
               default:
-                return Text(snapshot.data.data()['name']);
+                return Text(snapshot.data.name);
             }
           },
         ),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection(itemsPath).snapshots(),
+      body: StreamBuilder<List<Item>>(
+        stream: context.repo.observeItemsInList(listId),
         builder: (context, snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
@@ -41,12 +37,8 @@ class ItemsListScreen extends StatelessWidget {
               return Scrollbar(
                 child: ListView(
                   children: [
-                    ...snapshot.data.docs.sortedByQ([
-                      (d) => -1 * ((d.data()["is_favourite"] ?? false) ? 1 : 0),
-                      (d) => -1 * ((d.data()["is_checked"] ?? false) ? 1 : 0),
-                      (d) => d.data()["name"] ?? "",
-                    ]).map<Widget>((document) => ItemWidget(document)),
-                    SizedBox(height: 96),
+                    ...snapshot.data.map((document) => ItemWidget(document)),
+                    const SizedBox(height: 96),
                   ],
                 ),
               );
@@ -60,12 +52,7 @@ class ItemsListScreen extends StatelessWidget {
             child: NewItemDialog(),
           );
           if (name != null) {
-            FirebaseFirestore.instance.collection(itemsPath).doc().set(
-              {
-                "name": name,
-                "is_checked": false,
-              },
-            );
+            context.repo.addItem(listId, name);
           }
         },
         child: Icon(Icons.add),

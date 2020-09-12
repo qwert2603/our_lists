@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:our_lists/repo.dart';
+import 'package:provider/provider.dart';
+
 extension ListX<T> on List<T> {
   List<T> toUnmodifiable() => List.unmodifiable(this);
 
@@ -25,4 +29,8 @@ extension ListX<T> on List<T> {
         return 0;
       });
   }
+}
+
+extension BuildContextX on BuildContext {
+  Repo get repo => Provider.of<Repo>(this, listen: false);
 }
