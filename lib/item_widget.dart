@@ -10,33 +10,44 @@ class ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFavourite = item.isFavourite;
-    return GestureDetector(
-      child: CheckboxListTile(
-        title: Text(
-          item.name,
-          style: TextStyle(
-            fontWeight: isFavourite ? FontWeight.bold : FontWeight.normal,
-          ),
+    return Padding(
+      padding: EdgeInsets.all(2),
+      child: GestureDetector(
+        child: Row(
+          children: [
+            Checkbox(
+              value: item.isChecked,
+              onChanged: (ch) =>
+                  context.repo.setItemChecked(item.listId, item.id, ch),
+            ),
+            const SizedBox(width: 4),
+            Expanded(
+              child: Text(
+                item.name,
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            IconButton(
+              icon: Icon(
+                item.isFavourite ? Icons.star : Icons.star_border,
+              ),
+              onPressed: () => context.repo
+                  .setItemFavourite(item.listId, item.id, !item.isFavourite),
+            ),
+          ],
         ),
-        value: item.isChecked,
-        onChanged: (ch) =>
-            context.repo.setItemChecked(item.listId, item.id, ch),
-        selected: isFavourite,
+        onLongPress: () async {
+          final delete = await showDialog(
+            context: context,
+            child: DeleteItemDialog(
+              itemName: item.name,
+            ),
+          );
+          if (delete == true) {
+            context.repo.removeItem(item.listId, item.id);
+          }
+        },
       ),
-      onDoubleTap: () => context.repo
-          .setItemFavourite(item.listId, item.id, !item.isFavourite),
-      onLongPress: () async {
-        final delete = await showDialog(
-          context: context,
-          child: DeleteItemDialog(
-            itemName: item.name,
-          ),
-        );
-        if (delete == true) {
-          context.repo.removeItem(item.listId, item.id);
-        }
-      },
     );
   }
 }
