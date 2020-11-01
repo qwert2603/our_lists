@@ -36,7 +36,12 @@ class ItemWidget extends StatelessWidget {
               },
               child: Text(
                 item.name,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: item.isChecked ? Colors.grey[600] : Colors.black,
+                  decoration:
+                      item.isChecked ? TextDecoration.lineThrough : null,
+                ),
               ),
             ),
           ),
