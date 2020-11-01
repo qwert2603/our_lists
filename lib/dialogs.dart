@@ -37,6 +37,17 @@ class _NewListDialogState extends State<NewListDialog> {
   }
 }
 
+@immutable
+class NewItemResult {
+  final String name;
+  final bool isFavorite;
+
+  NewItemResult({
+    @required this.name,
+    @required this.isFavorite,
+  });
+}
+
 class NewItemDialog extends StatefulWidget {
   @override
   _NewItemDialogState createState() => _NewItemDialogState();
@@ -44,28 +55,42 @@ class NewItemDialog extends StatefulWidget {
 
 class _NewItemDialogState extends State<NewItemDialog> {
   TextEditingController controller = TextEditingController();
+  bool isFavourite = false;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("New item"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
+      content: Row(
         children: <Widget>[
-          TextField(
-            controller: controller,
-            onChanged: (s) => setState(() {}),
-            decoration: InputDecoration(
-              labelText: "Name",
-              border: OutlineInputBorder(),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              onChanged: (s) => setState(() {}),
+              decoration: InputDecoration(
+                labelText: "Name",
+                border: OutlineInputBorder(),
+              ),
             ),
+          ),
+          IconButton(
+            icon: Icon(
+              isFavourite ? Icons.star : Icons.star_border,
+            ),
+            onPressed: () => setState(() => isFavourite = !isFavourite),
           ),
         ],
       ),
       actions: <Widget>[
         FlatButton(
           onPressed: controller.text.trim().isNotEmpty
-              ? () => Navigator.pop(context, controller.text)
+              ? () => Navigator.pop(
+                    context,
+                    NewItemResult(
+                      name: controller.text,
+                      isFavorite: isFavourite,
+                    ),
+                  )
               : null,
           child: Text("Save"),
         ),

@@ -47,12 +47,16 @@ class ItemsListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final name = await showDialog(
+          final NewItemResult newItemResult = await showDialog(
             context: context,
             child: NewItemDialog(),
           );
-          if (name != null) {
-            context.repo.addItem(listId, name);
+          if (newItemResult != null) {
+            context.repo.addItem(
+              listId,
+              newItemResult.name,
+              newItemResult.isFavorite,
+            );
           }
         },
         child: Icon(Icons.add),

@@ -70,11 +70,12 @@ class RepoImpl implements Repo {
   }
 
   @override
-  void addItem(String listId, String name) {
+  void addItem(String listId, String name, bool isFavourite) {
     firestore.collection("$listsPath/$listId/items").doc().set(
       {
         "name": name,
         "is_checked": false,
+        "is_favourite": isFavourite,
       },
     );
   }

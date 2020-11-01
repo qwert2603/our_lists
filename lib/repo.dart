@@ -9,7 +9,7 @@ abstract class Repo {
 
   void addList(String name);
 
-  void addItem(String listId, String name);
+  void addItem(String listId, String name, bool isFavourite);
 
   void removeList(String listId);
 
