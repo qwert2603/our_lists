@@ -18,7 +18,7 @@ class ItemWidget extends StatelessWidget {
           Checkbox(
             value: item.isChecked,
             onChanged: (ch) =>
-                context.repo.setItemChecked(item.listId, item.id, ch),
+                context.repo.setItemChecked(item.listId, item.id, ch!),
           ),
           const SizedBox(width: 4),
           Expanded(

@@ -7,7 +7,7 @@ import 'package:our_lists/utils.dart';
 class ItemsListScreen extends StatelessWidget {
   final String listId;
 
-  ItemsListScreen({this.listId});
+  ItemsListScreen({required this.listId});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class ItemsListScreen extends StatelessWidget {
               case ConnectionState.waiting:
                 return Text('Loading...');
               default:
-                return Text(snapshot.data.name);
+                return Text(snapshot.data!.name);
             }
           },
         ),
@@ -37,7 +37,7 @@ class ItemsListScreen extends StatelessWidget {
               return Scrollbar(
                 child: ListView(
                   children: [
-                    ...snapshot.data.map((document) => ItemWidget(document)),
+                    ...snapshot.data!.map((document) => ItemWidget(document)),
                     const SizedBox(height: 96),
                   ],
                 ),
@@ -47,7 +47,7 @@ class ItemsListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final NewItemResult newItemResult = await showDialog(
+          final NewItemResult? newItemResult = await showDialog(
             context: context,
             builder: (context) => NewItemDialog(),
           );

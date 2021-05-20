@@ -43,8 +43,8 @@ class NewItemResult {
   final bool isFavorite;
 
   NewItemResult({
-    @required this.name,
-    @required this.isFavorite,
+    required this.name,
+    required this.isFavorite,
   });
 }
 
@@ -102,7 +102,7 @@ class _NewItemDialogState extends State<NewItemDialog> {
 class DeleteItemDialog extends StatelessWidget {
   final String itemName;
 
-  DeleteItemDialog({this.itemName});
+  DeleteItemDialog({required this.itemName});
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ description: The new Flutter application.
 version: 0.0.5+5
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ^2.12.0
 
 dependencies:
   flutter:

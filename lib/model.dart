@@ -9,11 +9,11 @@ class Item {
   final bool isFavourite;
 
   Item({
-    this.id,
-    this.name,
-    this.listId,
-    this.isChecked,
-    this.isFavourite,
+    required this.id,
+    required this.name,
+    required this.listId,
+    required this.isChecked,
+    required this.isFavourite,
   });
 }
 
@@ -23,7 +23,7 @@ class ItemsList {
   final String name;
 
   ItemsList({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
   });
 }

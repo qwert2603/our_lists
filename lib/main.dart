@@ -71,7 +71,7 @@ class MainScreen extends StatelessWidget {
           ),
           body: Scrollbar(
             child: ListView(
-              children: snapshot.data.map<Widget>((itemsList) {
+              children: snapshot.data!.map<Widget>((itemsList) {
                     return ListTile(
                       title: Text(itemsList.name),
                       onTap: () => Navigator.pushNamed(

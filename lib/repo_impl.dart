@@ -8,7 +8,7 @@ class RepoImpl implements Repo {
   final firestore = FirebaseFirestore.instance;
   final String listsPath;
 
-  RepoImpl({this.listsPath});
+  RepoImpl({required this.listsPath});
 
   @override
   Stream<List<ItemsList>> observeLists() =>
