@@ -49,7 +49,7 @@ class ItemsListScreen extends StatelessWidget {
         onPressed: () async {
           final NewItemResult newItemResult = await showDialog(
             context: context,
-            child: NewItemDialog(),
+            builder: (context) => NewItemDialog(),
           );
           if (newItemResult != null) {
             context.repo.addItem(

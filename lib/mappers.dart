@@ -6,8 +6,8 @@ extension DocumentX on DocumentSnapshot {
         id: id,
         name: get("name"),
         listId: listId,
-        isChecked: data()["is_checked"] ?? false,
-        isFavourite: data()["is_favourite"] ?? false,
+        isChecked: get("is_checked") ?? false,
+        isFavourite: get("is_favourite") ?? false,
       );
 
   ItemsList toItemsList() => ItemsList(
