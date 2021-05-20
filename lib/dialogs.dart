@@ -26,7 +26,7 @@ class _NewListDialogState extends State<NewListDialog> {
         ],
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: controller.text.trim().isNotEmpty
               ? () => Navigator.pop(context, controller.text)
               : null,
@@ -82,7 +82,7 @@ class _NewItemDialogState extends State<NewItemDialog> {
         ],
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: controller.text.trim().isNotEmpty
               ? () => Navigator.pop(
                     context,
@@ -109,11 +109,11 @@ class DeleteItemDialog extends StatelessWidget {
     return AlertDialog(
       title: Text('Delete "$itemName"?'),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context, false),
           child: Text("Cancel"),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context, true),
           child: Text("Delete"),
         ),
