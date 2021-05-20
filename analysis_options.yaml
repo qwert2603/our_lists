@@ -1,0 +1,16 @@
+include: package:pedantic/analysis_options.yaml
+
+analyzer:
+  exclude: [ build/** ]
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+
+linter:
+  rules:
+    prefer_single_quotes: false
+    unawaited_futures: false
+    omit_local_variable_types: false
+    prefer_final_locals: true
+
+

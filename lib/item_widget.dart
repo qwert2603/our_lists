@@ -24,7 +24,7 @@ class ItemWidget extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onLongPress: () async {
-                final delete = await showDialog(
+                final delete = await showDialog<bool>(
                   context: context,
                   builder: (context) => DeleteItemDialog(
                     itemName: item.name,

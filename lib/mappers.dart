@@ -4,14 +4,14 @@ import 'package:our_lists/model.dart';
 extension DocumentX on DocumentSnapshot {
   Item toItem({required String listId}) => Item(
         id: id,
-        name: get("name"),
+        name: get("name") as String,
         listId: listId,
-        isChecked: get("is_checked") ?? false,
-        isFavourite: get("is_favourite") ?? false,
+        isChecked: get("is_checked") as bool? ?? false,
+        isFavourite: get("is_favourite") as bool? ?? false,
       );
 
   ItemsList toItemsList() => ItemsList(
         id: id,
-        name: get("name"),
+        name: get("name") as String,
       );
 }

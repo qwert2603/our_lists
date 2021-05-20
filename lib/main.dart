@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         home: MainScreen(),
         onGenerateRoute: (routeSettings) {
           if (routeSettings.name == RouteNames.itemsList) {
-            return MaterialPageRoute(
+            return MaterialPageRoute<void>(
               builder: (context) => ItemsListScreen(
                 listId: routeSettings.arguments as String,
               ),
@@ -80,7 +80,7 @@ class MainScreen extends StatelessWidget {
                         arguments: itemsList.id,
                       ),
                       onLongPress: () async {
-                        final delete = await showDialog(
+                        final delete = await showDialog<bool>(
                           context: context,
                           builder: (context) => DeleteItemDialog(
                             itemName: itemsList.name,
@@ -97,7 +97,7 @@ class MainScreen extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
-              final name = await showDialog(
+              final name = await showDialog<String>(
                 context: context,
                 builder: (context) => NewListDialog(),
               );

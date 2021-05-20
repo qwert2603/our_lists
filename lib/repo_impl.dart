@@ -46,7 +46,7 @@ class RepoImpl implements Repo {
   @override
   void setItemFavourite(String listId, String itemId, bool isFavourite) {
     firestore.doc("$listsPath/$listId/items/$itemId").set(
-      {"is_favourite": isFavourite},
+      <String, dynamic>{"is_favourite": isFavourite},
       SetOptions(merge: true),
     );
   }
@@ -54,7 +54,7 @@ class RepoImpl implements Repo {
   @override
   void setItemChecked(String listId, String itemId, bool isChecked) {
     firestore.doc("$listsPath/$listId/items/$itemId").set(
-      {"is_checked": isChecked},
+      <String, dynamic>{"is_checked": isChecked},
       SetOptions(merge: true),
     );
   }
@@ -72,7 +72,7 @@ class RepoImpl implements Repo {
   @override
   void addItem(String listId, String name, bool isFavourite) {
     firestore.collection("$listsPath/$listId/items").doc().set(
-      {
+      <String, dynamic>{
         "name": name,
         "is_checked": false,
         "is_favourite": isFavourite,
@@ -83,7 +83,7 @@ class RepoImpl implements Repo {
   @override
   void addList(String name) {
     firestore.collection(listsPath).doc().set(
-      {"name": name},
+      <String, dynamic>{"name": name},
     );
   }
 }
